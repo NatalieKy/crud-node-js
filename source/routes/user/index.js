@@ -1,9 +1,6 @@
 const { Router } = require('express');
 
-const {
-    check_access_token_middleware,
-    check_is_status_active_middleware
-} = require('../../middleware/auth');
+const { check_access_token_middleware, check_is_status_active_middleware } = require('../../middleware/auth');
 const {
     check_is_user_deleted,
     check_user_id_validity_middleware,

@@ -59,7 +59,6 @@ module.exports = {
             }
 
             delete new_user.dataValues.password;
-            delete new_user.dataValues.deleted;
 
             const host = HOST;
             const path_name = PATH_NAME_FOR_VERIFICATION_EMAIL;
@@ -97,8 +96,8 @@ module.exports = {
                 const avatar_full_path = path.join(process.cwd(), 'source', 'public', avatar_path_without_public);
                 const avatar_path = path.join(avatar_path_without_public, new_avatar_name);
 
-                await fs.rmdir(path.join(avatar_path_without_public), {recursive: true});
-                await fs.mkdir(path.join(avatar_full_path), {recursive: true});
+                await fs.rmdir(path.join(avatar_path_without_public), { recursive: true });
+                await fs.mkdir(path.join(avatar_full_path), { recursive: true });
                 await avatar.mv(path.join(avatar_full_path, new_avatar_name));
 
                 await update_user_avatar_service(avatar_path, user_id, transaction);
