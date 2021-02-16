@@ -1,0 +1,16 @@
+module.exports = {
+    AUTHORIZATION: 'Authorization',
+    CAR: 'Car',
+    CARS: 'cars',
+    CASCADE: 'CASCADE',
+    FEMALE: 'female',
+    FILES: 'files',
+    LOCALHOST: 'localhost',
+    MALE: 'male',
+    NO_REPLY: 'no reply',
+    AUTH_MODEL: 'Auth',
+    AUTHENTICATION_TABLE: 'authentication_table',
+    PHOTO_TYPE: 'photo',
+    USER_MODEL: 'User',
+    USERS_TABLE: 'users_table',
+};
