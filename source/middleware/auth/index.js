@@ -50,7 +50,7 @@ module.exports = {
             const { email } = req.body;
             const user = await get_user_and_token_pair_by_email_service(email);
 
-            if (user.Auth !== null) {
+            if ((user.Auth !== null) || !user) {
                 throw new Error_handler(METHOD_NOT_ALLOWED.message, METHOD_NOT_ALLOWED.code);
             }
 

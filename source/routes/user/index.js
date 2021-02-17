@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const {
-    auth_middleware: { check_access_token_middleware, check_is_status_active_middleware },
+    auth_middleware: { check_access_token_middleware },
     user_middleware: { check_is_user_deleted, check_user_id_validity_middleware, check_updated_user_middleware,
         check_new_user_middleware, check_user_by_email_middleware, check_user_by_id_middleware, check_is_student_photo_single,
         check_photo_type, }
@@ -20,7 +20,6 @@ user_router.use('/:user_id',
     check_user_id_validity_middleware,
     check_is_user_deleted,
     check_user_by_id_middleware,
-    check_is_status_active_middleware,
     check_access_token_middleware);
 user_router.get('/:user_id',
     get_user_controller);
@@ -32,6 +31,7 @@ user_router.post('/',
     create_user_controller);
 user_router.put('/:user_id',
     check_updated_user_middleware,
+    check_access_token_middleware,
     check_photo_type,
     check_is_student_photo_single,
     update_user_controller);

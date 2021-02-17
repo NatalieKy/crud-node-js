@@ -20,13 +20,11 @@ auth_router.post('/login',
     login_controller);
 auth_router.delete('/logout/:user_id',
     check_user_id_validity_middleware,
-    check_is_status_active_middleware,
     check_access_token_middleware,
     logout_controller);
 auth_router.post('/refresh/:user_id',
     check_user_id_validity_middleware,
     check_refresh_token_middleware,
-    check_is_status_active_middleware,
     refresh_token_usage_controller);
 
 module.exports = auth_router;
