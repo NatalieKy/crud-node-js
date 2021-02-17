@@ -6,15 +6,14 @@ const {
         check_new_user_middleware, check_user_by_email_middleware, check_user_by_id_middleware, check_is_student_photo_single,
         check_photo_type, }
 } = require('../../middleware');
-
-const user_router = Router();
-
 const {
     get_user_controller,
     create_user_controller,
     update_user_controller,
     delete_user_controller,
 } = require('../../controllers/user');
+
+const user_router = Router();
 
 user_router.use('/:user_id',
     check_user_id_validity_middleware,
