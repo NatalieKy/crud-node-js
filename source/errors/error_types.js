@@ -10,7 +10,7 @@ module.exports = {
         code: BAD_REQUEST
     },
     TOO_MANY_USER_PHOTOS: {
-        message: 'Uploaded student`s photo must be one',
+        message: 'Uploaded users`s photo must be one',
         code: BAD_REQUEST
     },
     FORBIDDEN: {

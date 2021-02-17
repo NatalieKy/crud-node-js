@@ -1,7 +1,5 @@
 module.exports = {
     ACCESS_TOKEN_LIFE: '1d',
-    CARS_FOREIGN_KEY: 'student_id',
-    CARS_PRIMARY_KEY: 'id',
     CRONE_00_00_EVERY_DAY: '0 0 * * *',
     FILES_FOREIGN_KEY: 'carID',
     DIALECT: 'mysql',

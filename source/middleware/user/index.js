@@ -159,7 +159,7 @@ module.exports = {
         }
     },
 
-    check_is_student_photo_single: (req, res, next) => {
+    check_is_user_photo_single: (req, res, next) => {
         try {
             if (req.photos) {
                 if (req.photos.length > 1) {
