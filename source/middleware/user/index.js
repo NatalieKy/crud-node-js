@@ -57,7 +57,7 @@ module.exports = {
     check_user_by_email_middleware: async (req, res, next) => {
         try {
             const { email } = req.body;
-            console.log(req.user);
+
             const user = await check_user_by_email_service(email);
 
             if (user) {
