@@ -2,7 +2,7 @@ const { transactionInstance } = require('../../dataBase_SQL').getInstance();
 const { NO_CONTENT, OK } = require('../../configs');
 const { tokens_creator } = require('../../utilities');
 const {
-    user: { update_user_status_service },
+    user_services: { update_user_status_service },
     token_service: { create_token_pair_service, delete_token_pair_by_access_token_service, delete_token_pair_by_user_id }
 } = require('../../services');
 

@@ -21,7 +21,7 @@ module.exports = {
 
     get_user_controller: (req, res, next) => {
         try {
-            const user = req.user.dataValues;
+            const { user } = req;
             const user_for_frontend = {};
             const { user_id, name, surname, age, gender, email } = user;
 

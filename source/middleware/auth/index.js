@@ -8,7 +8,7 @@ const {
     http_status_codes: { BAD_REQUEST }
 } = require('../../configs');
 const {
-    user_services: { check_user_by_email_service, check_user_by_id_service },
+    user_services: { check_user_by_email_service },
     token_service: { get_user_and_token_pair_by_email_service, get_access_token_with_user_service,
         get_refresh_token_with_user_service,
         get_verify_token_with_user_service }
@@ -108,15 +108,13 @@ module.exports = {
         }
     },
 
-    check_is_status_active_middleware: async (req, res, next) => {
+    check_is_status_active_middleware: (req, res, next) => {
         try {
-            const { user_id } = req.user;
-            const user = await check_user_by_id_service(user_id);
-
-            if (!user.dataValues.status) {
+            const { user } = req;
+            if (user.status) {
                 throw new Error_handler(FORBIDDEN.message, FORBIDDEN.code);
             }
-
+            req.user = user;
             next();
         } catch (e) {
             next(e);

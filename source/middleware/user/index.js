@@ -20,7 +20,7 @@ module.exports = {
                 throw new Error_handler(NO_USER_FOUND.message, NO_USER_FOUND.code);
             }
 
-            req.user = user;
+            req.user = user.dataValues;
             next();
         } catch (e) {
             next(e);
@@ -57,6 +57,7 @@ module.exports = {
     check_user_by_email_middleware: async (req, res, next) => {
         try {
             const { email } = req.body;
+            console.log(req.user);
             const user = await check_user_by_email_service(email);
 
             if (user) {

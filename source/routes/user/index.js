@@ -22,7 +22,6 @@ user_router.use('/:user_id',
     check_user_by_id_middleware,
     check_is_status_active_middleware,
     check_access_token_middleware);
-
 user_router.get('/:user_id',
     get_user_controller);
 user_router.post('/',
