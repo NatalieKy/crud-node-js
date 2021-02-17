@@ -33,7 +33,7 @@ module.exports = {
         }
     },
 
-    create_user_controller: async (req, res, next) => {
+    reate_user_controller: async (req, res, next) => {
         const transaction = await transactionInstance();
 
         try {

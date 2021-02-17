@@ -188,7 +188,6 @@ module.exports = {
     check_reset_password_token_middleware: async (req, res, next) => {
         try {
             const token = req.query.id;
-            console.log(token);
             if (!token) {
                 throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
             }
