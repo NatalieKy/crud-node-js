@@ -59,7 +59,7 @@ module.exports = {
     refresh_token_usage_controller: async (req, res, next) => {
         const transaction = await transactionInstance();
         try {
-            const { user_id } = req;
+            const { user_id } = req.user;
 
             await delete_token_pair_by_user_id(user_id);
 

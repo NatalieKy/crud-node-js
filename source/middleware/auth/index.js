@@ -111,8 +111,9 @@ module.exports = {
     check_is_status_active_middleware: (req, res, next) => {
         try {
             const { user } = req;
-            if (user.status) {
-                throw new Error_handler(FORBIDDEN.message, FORBIDDEN.code);
+
+            if (user.status === false) {
+                throw new Error_handler(UNAUTHORIZED.message, UNAUTHORIZED.code);
             }
             req.user = user;
             next();
