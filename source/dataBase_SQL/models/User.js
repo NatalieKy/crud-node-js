@@ -1,5 +1,7 @@
-const { MINIMUM_AGE, USER_PASSWORD, AUTH_FOREIGN_KEY } = require('../../configs/constants');
-const { CASCADE, FEMALE, MALE, USER_MODEL, USERS_TABLE } = require('../../configs/name_enums');
+const {
+    constants: { MINIMUM_AGE, USER_PASSWORD, AUTH_FOREIGN_KEY },
+    name_enums: { CASCADE, FEMALE, MALE, USER_MODEL, USERS_TABLE }
+} = require('../../configs');
 
 module.exports = (client, DataTypes) => {
     const User = client.define(USER_MODEL, {

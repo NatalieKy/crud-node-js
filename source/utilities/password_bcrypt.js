@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 
-const { ErrorHandler } = require('../errors/error_handler');
-const { NOT_VALID_CREDENTIALS } = require('../errors/error_types');
+const {
+    error_handler: { ErrorHandler },
+    error_types: { NOT_VALID_CREDENTIALS }
+} = require('../errors');
 
 module.exports = {
     password_hasher: (password) => bcrypt.hash(password, 10),

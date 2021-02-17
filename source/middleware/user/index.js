@@ -1,9 +1,13 @@
-const { BAD_REQUEST } = require('../../configs/http_status_codes');
-const { Error_handler } = require('../../errors/error_handler');
+const {
+    http_status_codes: { BAD_REQUEST },
+    constants: { PHOTOS_MIMETYPES, PHOTOS_MAX_SIZE }
+} = require('../../configs');
+const {
+    error_handler: { Error_handler },
+    error_types: { EMAIL_ALREADY_USED, NO_USER_FOUND, TOO_MANY_USER_PHOTOS, TOO_BIG_PHOTO }
+} = require('../../errors');
 const { joi_validator_create_user, joi_validator_update_user, joi_validator_user_id } = require('../../validators/user');
 const { check_user_by_email_service, check_user_by_id_service } = require('../../services/user');
-const { EMAIL_ALREADY_USED, NO_USER_FOUND, TOO_MANY_USER_PHOTOS, TOO_BIG_PHOTO } = require('../../errors/error_types');
-const { PHOTOS_MIMETYPES, PHOTOS_MAX_SIZE } = require('../../configs/constants');
 
 module.exports = {
 

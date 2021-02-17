@@ -1,5 +1,7 @@
-const { MINIMUM_AGE, USER_PRIMARY_KEY } = require('../../configs/constants');
-const { CASCADE, FEMALE, MALE, AUTHENTICATION_TABLE, USERS_TABLE, USER_MODEL } = require('../../configs/name_enums');
+const {
+    constants: { MINIMUM_AGE, USER_PRIMARY_KEY },
+    name_enums: { CASCADE, FEMALE, MALE, AUTHENTICATION_TABLE, USERS_TABLE },
+} = require('../../configs');
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {

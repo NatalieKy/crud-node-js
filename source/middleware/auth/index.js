@@ -1,19 +1,22 @@
 const jwt = require('jsonwebtoken');
 
-const { ACCESS_TOKEN_WORD, REFRESH_TOKEN_WORD, VERIFY_EMAIL_TOKEN_WORD } = require('../../configs/config');
-const { AUTHORIZATION } = require('../../configs/name_enums');
-const { check_user_by_email_service, check_user_by_id_service } = require('../../services/user');
+const { joi_validator_credentials } = require('../../validators/auth');
 const { password_equlity_checker } = require('../../utilities/password_bcrypt');
 const {
-    get_user_and_token_pair_by_email_service,
-    get_access_token_with_user_service,
-    get_refresh_token_with_user_service,
-    get_verify_token_with_user_service
-} = require('../../services/token');
-const { joi_validator_credentials } = require('../../validators/auth');
-const { Error_handler } = require('../../errors/error_handler');
-const { UNAUTHORIZED, INVALID_TOKEN, METHOD_NOT_ALLOWED, FORBIDDEN } = require('../../errors/error_types');
-const { BAD_REQUEST } = require('../../configs/http_status_codes');
+    config: { ACCESS_TOKEN_WORD, REFRESH_TOKEN_WORD, VERIFY_EMAIL_TOKEN_WORD },
+    name_enums: { AUTHORIZATION },
+    http_status_codes: { BAD_REQUEST }
+} = require('../../configs');
+const {
+    user_services: { check_user_by_email_service, check_user_by_id_service },
+    token_service: { get_user_and_token_pair_by_email_service, get_access_token_with_user_service,
+        get_refresh_token_with_user_service,
+        get_verify_token_with_user_service }
+} = require('../../services');
+const {
+    error_handler: { Error_handler },
+    error_types: { UNAUTHORIZED, INVALID_TOKEN, METHOD_NOT_ALLOWED, FORBIDDEN }
+} = require('../../errors');
 
 module.exports = {
 

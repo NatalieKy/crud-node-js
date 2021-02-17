@@ -3,22 +3,19 @@ const path = require('path');
 const uuid = require('uuid').v1();
 const jwt = require('jsonwebtoken');
 
-const { transactionInstance } = require('../../dataBase_SQL').getInstance();
-
-const { NEW_USER } = require('../../configs/email-events');
-const { CREATED, OK, NO_CONTENT } = require('../../configs/http_status_codes');
 const { password_hasher } = require('../../utilities/password_bcrypt');
-const { HOST, PATH_NAME_FOR_VERIFICATION_EMAIL } = require('../../configs/constants');
-const { VERIFY_EMAIL_TOKEN_WORD } = require('../../configs/config');
-const { VERIFY_EMAIL_TOKEN_LIFE } = require('../../configs/constants');
-const { email_sender } = require('../../services/email');
+const { transactionInstance } = require('../../dataBase_SQL').getInstance();
 const {
-    create_user_service,
-    update_user_service,
-    update_user_avatar_service,
-    delete_user_service,
-    update_verify_token_service
-} = require('../../services/user');
+    email_events: { NEW_USER },
+    http_status_codes: { CREATED, OK, NO_CONTENT },
+    constants: { HOST, PATH_NAME_FOR_VERIFICATION_EMAIL, VERIFY_EMAIL_TOKEN_LIFE },
+    config: { VERIFY_EMAIL_TOKEN_WORD }
+} = require('../../configs');
+const {
+    email_sender_services: { email_sender },
+    user_services: { create_user_service, update_user_service, update_user_avatar_service, delete_user_service,
+        update_verify_token_service, }
+} = require('../../services');
 
 module.exports = {
 
@@ -44,33 +41,29 @@ module.exports = {
             const user_password = await password_hasher(req.body.password);
             const active = false;
             const new_user = await create_user_service({ ...req.body }, user_password, active, transaction);
+            const { user_id } = new_user.dataValues;
 
             if (avatar) {
                 const avatar_extension = avatar.name.split('.').pop();
                 const new_avatar_name = `${uuid}.${avatar_extension}`;
-                const avatar_path_without_public = path.join('users', `${new_user.dataValues.user_id}`, 'avatar');
+                const avatar_path_without_public = path.join('users', `${user_id}`, 'avatar');
                 const avatar_full_path = path.join(process.cwd(), 'source', 'public', avatar_path_without_public);
                 const avatar_path = path.join(avatar_path_without_public, new_avatar_name);
 
                 await fs.mkdir(path.join(avatar_full_path), { recursive: true });
                 await avatar.mv(path.join(avatar_full_path, new_avatar_name));
 
-                await update_user_avatar_service(avatar_path, new_user.dataValues.user_id, transaction);
+                await update_user_avatar_service(avatar_path, user_id, transaction);
             }
 
             delete new_user.dataValues.password;
 
-            const host = HOST;
-            const path_name = PATH_NAME_FOR_VERIFICATION_EMAIL;
-            const id = {
-                id: new_user.dataValues.user_id,
-            };
-
+            const id = { id: user_id };
             const token_for_verification = jwt.sign({ id }, VERIFY_EMAIL_TOKEN_WORD, { expiresIn: VERIFY_EMAIL_TOKEN_LIFE });
 
-            await update_verify_token_service(token_for_verification, new_user.dataValues.user_id, transaction);
+            await update_verify_token_service(token_for_verification, user_id, transaction);
 
-            const custom_url = `http://${host}/${path_name}?email=${req.body.email}&id=${token_for_verification}#new_user.dataValues.user_id`;
+            const custom_url = `http://${HOST}/${PATH_NAME_FOR_VERIFICATION_EMAIL}?email=${req.body.email}&id=${token_for_verification}`;
 
             await email_sender(req.body.email, NEW_USER, { user_name: req.body.name, custom_url });
             await transaction.commit();

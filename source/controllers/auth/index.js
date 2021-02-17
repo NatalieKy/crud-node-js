@@ -1,12 +1,10 @@
 const { transactionInstance } = require('../../dataBase_SQL').getInstance();
-const { NO_CONTENT, OK } = require('../../configs/http_status_codes');
+const { NO_CONTENT, OK } = require('../../configs');
 const { tokens_creator } = require('../../utilities');
-const { update_user_status_service } = require('../../services/user');
 const {
-    create_token_pair_service,
-    delete_token_pair_by_access_token_service,
-    delete_token_pair_by_user_id
-} = require('../../services/token');
+    user: { update_user_status_service },
+    token_service: { create_token_pair_service, delete_token_pair_by_access_token_service, delete_token_pair_by_user_id }
+} = require('../../services');
 
 module.exports = {
 

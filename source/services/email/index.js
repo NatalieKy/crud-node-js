@@ -1,9 +1,9 @@
-
 const nodemailer = require('nodemailer');
-const path = require('path');
 
-const { MAIL, PASSWORD_TO_MAIL, TYPE_OF_MAIL } = require('../../configs/config');
-const { LOCALHOST, NO_REPLY } = require('../../configs/name_enums');
+const {
+    config: { MAIL, PASSWORD_TO_MAIL, TYPE_OF_MAIL },
+    name_enums: { LOCALHOST, NO_REPLY }
+} = require('../../configs');
 const { Error_handler } = require('../../errors/error_handler');
 
 const transporter = nodemailer.createTransport({
@@ -25,10 +25,10 @@ const email_sender = (user_email, type_of_action, info) => {
             from: NO_REPLY,
             to: user_email,
             subject: 'account verification',
-            text: `Click on the link below to veriy your account ${info.custom_url}`
+            text: `Click on the link below to verify your account ${info.custom_url}`
         });
     } catch (e) {
-        console.log(e);
+        throw new Error_handler(e.message, e.code);
     }
 };
 

@@ -1,16 +1,11 @@
 const { Router } = require('express');
 
-const { check_access_token_middleware, check_is_status_active_middleware } = require('../../middleware/auth');
 const {
-    check_is_user_deleted,
-    check_user_id_validity_middleware,
-    check_updated_user_middleware,
-    check_new_user_middleware,
-    check_user_by_email_middleware,
-    check_user_by_id_middleware,
-    check_is_student_photo_single,
-    check_photo_type,
-} = require('../../middleware/user');
+    auth_middleware: { check_access_token_middleware, check_is_status_active_middleware },
+    user_middleware: { check_is_user_deleted, check_user_id_validity_middleware, check_updated_user_middleware,
+        check_new_user_middleware, check_user_by_email_middleware, check_user_by_id_middleware, check_is_student_photo_single,
+        check_photo_type, }
+} = require('../../middleware');
 
 const user_router = Router();
 

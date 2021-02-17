@@ -1,5 +1,7 @@
-const { USER_PRIMARY_KEY } = require('../../configs/constants');
-const { AUTHENTICATION_TABLE, AUTH_MODEL, USER_MODEL } = require('../../configs/name_enums');
+const {
+    constants: { USER_PRIMARY_KEY },
+    name_enums: { AUTHENTICATION_TABLE, AUTH_MODEL, USER_MODEL }
+} = require('../../configs');
 
 module.exports = (client, DataTypes) => {
     const Auth = client.define(AUTH_MODEL, {

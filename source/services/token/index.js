@@ -1,8 +1,10 @@
 const { Op } = require('sequelize');
 
 const dataBase = require('../../dataBase_SQL').getInstance();
-const { AUTH_MODEL, USER_MODEL } = require('../../configs/name_enums');
-const { ONE_WEEK } = require('../../configs/constants');
+const {
+    name_enums: { AUTH_MODEL, USER_MODEL },
+    constants: { ONE_WEEK }
+} = require('../../configs');
 
 module.exports = {
 

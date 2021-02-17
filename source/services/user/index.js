@@ -1,6 +1,8 @@
 const database = require('../../dataBase_SQL').getInstance();
-const { SCOPE_EXCLUDE_PASSWORD } = require('../../configs/constants');
-const { USER_MODEL } = require('../../configs/name_enums');
+const {
+    constants: { SCOPE_EXCLUDE_PASSWORD },
+    name_enums: { USER_MODEL }
+} = require('../../configs');
 
 module.exports = {
 
