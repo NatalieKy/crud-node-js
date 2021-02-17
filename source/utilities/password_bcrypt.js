@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const {
-    error_handler: { ErrorHandler },
+    error_handler: { Error_handler },
     error_types: { NOT_VALID_CREDENTIALS }
 } = require('../errors');
 
@@ -11,7 +11,7 @@ module.exports = {
         const is_password_true = await bcrypt.compare(password, hash);
 
         if (!is_password_true) {
-            throw new ErrorHandler(NOT_VALID_CREDENTIALS.message, NOT_VALID_CREDENTIALS.code);
+            throw new Error_handler(NOT_VALID_CREDENTIALS.message, NOT_VALID_CREDENTIALS.code);
         }
 
         return is_password_true;

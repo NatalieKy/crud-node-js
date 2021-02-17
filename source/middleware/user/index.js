@@ -4,9 +4,10 @@ const {
 } = require('../../configs');
 const {
     error_handler: { Error_handler },
-    error_types: { EMAIL_ALREADY_USED, NO_USER_FOUND, TOO_MANY_USER_PHOTOS, TOO_BIG_PHOTO }
+    error_types: { EMAIL_ALREADY_USED, NO_USER_FOUND, TOO_MANY_USER_PHOTOS, TOO_BIG_PHOTO, NOT_VALID_CREDENTIALS }
 } = require('../../errors');
-const { joi_validator_create_user, joi_validator_update_user, joi_validator_user_id } = require('../../validators/user');
+const { joi_validator_create_user, joi_validator_update_user, joi_validator_user_id, joi_validator_password
+} = require('../../validators/user');
 const { check_user_by_email_service, check_user_by_id_service } = require('../../services/user');
 
 module.exports = {
@@ -40,6 +41,18 @@ module.exports = {
             next(e);
         }
     },
+    check_new_password_middleware: (req, res, next) => {
+        try {
+            const { error } = joi_validator_password.validate(req.body.password);
+
+            if (error) {
+                throw new Error_handler(error.details[0].message, BAD_REQUEST);
+            }
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 
     check_updated_user_middleware: (req, res, next) => {
         try {
@@ -63,6 +76,27 @@ module.exports = {
             if (user) {
                 throw new Error_handler(EMAIL_ALREADY_USED.message, EMAIL_ALREADY_USED.code);
             }
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    check_user_in_db_by_email_middleware: async (req, res, next) => {
+        try {
+            const { email } = req.body;
+
+            if (!email) {
+                throw new Error_handler(NOT_VALID_CREDENTIALS.message, NOT_VALID_CREDENTIALS.code);
+            }
+
+            const user = await check_user_by_email_service(email);
+
+            if (!user) {
+                throw new Error_handler(NO_USER_FOUND.message, NO_USER_FOUND.code);
+            }
+
+            req.user = user;
             next();
         } catch (e) {
             next(e);

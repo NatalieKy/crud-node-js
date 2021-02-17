@@ -59,6 +59,9 @@ module.exports = {
             },
             token_for_verification: {
                 type: Sequelize.DataTypes.STRING,
+            },
+            token_for_password_reset: {
+                type: Sequelize.DataTypes.STRING,
             }
         },);
 

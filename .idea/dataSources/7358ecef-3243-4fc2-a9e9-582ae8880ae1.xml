@@ -4095,17 +4095,21 @@ SELECT|sys.sys_config
       <Position>11</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <index id="971" parent="304" name="user_id">
+    <column id="971" parent="304" name="token_for_password_reset">
+      <Position>12</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <index id="972" parent="304" name="user_id">
       <ColNames>user_id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="972" parent="304" name="PRIMARY">
+    <key id="973" parent="304" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>user_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="973" parent="304" name="user_id">
+    <key id="974" parent="304" name="user_id">
       <ColNames>user_id</ColNames>
       <UnderlyingIndexName>user_id</UnderlyingIndexName>
     </key>

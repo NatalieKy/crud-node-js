@@ -19,13 +19,13 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const email_sender = (user_email, type_of_action, info) => {
+const email_sender = (user_email, payload, info) => {
     try {
         return transporter.sendMail({
             from: NO_REPLY,
             to: user_email,
-            subject: 'account verification',
-            text: `Click on the link below to verify your account ${info.custom_url}`
+            subject: payload.type_of_action,
+            text: `${payload.text} ${info.custom_url}`
         });
     } catch (e) {
         throw new Error_handler(e.message, e.code);

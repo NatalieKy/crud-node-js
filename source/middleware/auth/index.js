@@ -3,14 +3,14 @@ const jwt = require('jsonwebtoken');
 const { joi_validator_credentials } = require('../../validators/auth');
 const { password_equlity_checker } = require('../../utilities/password_bcrypt');
 const {
-    config: { ACCESS_TOKEN_WORD, REFRESH_TOKEN_WORD, VERIFY_EMAIL_TOKEN_WORD },
+    config: { ACCESS_TOKEN_WORD, REFRESH_TOKEN_WORD, VERIFY_EMAIL_TOKEN_WORD, RESET_PASSWORD_TOKEN_WORD },
     name_enums: { AUTHORIZATION },
     http_status_codes: { BAD_REQUEST }
 } = require('../../configs');
 const {
-    user_services: { check_user_by_email_service },
     token_service: { get_user_and_token_pair_by_email_service, get_access_token_with_user_service,
         get_refresh_token_with_user_service,
+        get_token_for_password_reset_with_user_service,
         get_verify_token_with_user_service }
 } = require('../../services');
 const {
@@ -23,13 +23,9 @@ module.exports = {
     check_do_credentials_exist_middleware: async (req, res, next) => {
         try {
             const { email, password } = req.body;
-            const user = await check_user_by_email_service(email);
+            const { user } = req;
 
             if (!email || !password) {
-                throw new Error_handler(UNAUTHORIZED.message, UNAUTHORIZED.code);
-            }
-
-            if (!user) {
                 throw new Error_handler(UNAUTHORIZED.message, UNAUTHORIZED.code);
             }
 
@@ -55,7 +51,6 @@ module.exports = {
             }
 
             req.user = user.dataValues;
-
             next();
         } catch (e) {
             next(e);
@@ -84,7 +79,7 @@ module.exports = {
                 throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
             }
 
-            jwt.verify(access_token, ACCESS_TOKEN_WORD, (err) => {
+            await jwt.verify(access_token, ACCESS_TOKEN_WORD, (err) => {
                 if (err) {
                     throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
                 }
@@ -112,7 +107,7 @@ module.exports = {
         try {
             const { user } = req;
 
-            if (user.status === false) {
+            if (user.active === false) {
                 throw new Error_handler(UNAUTHORIZED.message, UNAUTHORIZED.code);
             }
             req.user = user;
@@ -131,7 +126,7 @@ module.exports = {
                 throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
             }
 
-            jwt.verify(refresh_token, REFRESH_TOKEN_WORD, (err) => {
+            await jwt.verify(refresh_token, REFRESH_TOKEN_WORD, (err) => {
                 if (err) {
                     throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
                 }
@@ -163,7 +158,7 @@ module.exports = {
                 throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
             }
 
-            jwt.verify(token, VERIFY_EMAIL_TOKEN_WORD, async (err, decoded) => {
+            await jwt.verify(token, VERIFY_EMAIL_TOKEN_WORD, async (err, decoded) => {
                 if (err) {
                     throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
                 } else {
@@ -181,6 +176,41 @@ module.exports = {
             });
 
             const user = await get_verify_token_with_user_service(token);
+
+            req.user = user.dataValues;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    check_reset_password_token_middleware: async (req, res, next) => {
+        try {
+            const token = req.query.id;
+            console.log(token);
+            if (!token) {
+                throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
+            }
+
+            await jwt.verify(token, RESET_PASSWORD_TOKEN_WORD, async (err, decoded) => {
+                if (err) {
+                    throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
+                } else {
+                    const { id } = decoded.id;
+                    const user = await get_token_for_password_reset_with_user_service(token);
+
+                    if (!user) {
+                        throw new Error_handler(INVALID_TOKEN.message, INVALID_TOKEN.code);
+                    }
+
+                    if (user.dataValues.user_id !== +id) {
+                        throw new Error_handler(FORBIDDEN.message, FORBIDDEN.code);
+                    }
+                }
+            });
+
+            const user = await get_token_for_password_reset_with_user_service(token);
 
             req.user = user.dataValues;
 

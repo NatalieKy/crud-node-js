@@ -74,6 +74,16 @@ module.exports = {
         });
     },
 
+    update_token_for_password_reset_service: (token_for_password_reset, user_id, transaction) => {
+        const User = database.getModel(USER_MODEL);
+
+        return User.update({
+            token_for_password_reset
+        }, { where: { user_id },
+            transaction
+        });
+    },
+
     update_user_status_service: (user_id, transaction) => {
         const User = database.getModel(USER_MODEL);
 

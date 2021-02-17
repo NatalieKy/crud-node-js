@@ -46,6 +46,14 @@ module.exports = {
         });
     },
 
+    get_token_for_password_reset_with_user_service: (token) => {
+        const User = dataBase.getModel(USER_MODEL);
+
+        return User.findOne({
+            where: { token_for_password_reset: token }
+        });
+    },
+
     delete_refresh_token_service: () => {
         const Auth = dataBase.getModel(AUTH_MODEL);
         return Auth.destroy({

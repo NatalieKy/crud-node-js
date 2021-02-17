@@ -9,6 +9,10 @@ module.exports = {
         .min(1)
         .required(),
 
+    joi_validator_password: joi.string()
+        .regex(PASSWORD)
+        .required(),
+
     joi_validator_create_user: joi.object({
         name: joi.string()
             .regex(NAME)

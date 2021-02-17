@@ -57,6 +57,9 @@ module.exports = (client, DataTypes) => {
         },
         token_for_verification: {
             type: DataTypes.STRING
+        },
+        token_for_password_reset: {
+            type: DataTypes.STRING
         }
     }, {
         tableName: USERS_TABLE,

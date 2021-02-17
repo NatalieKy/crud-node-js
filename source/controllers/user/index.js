@@ -6,15 +6,15 @@ const jwt = require('jsonwebtoken');
 const { password_hasher } = require('../../utilities/password_bcrypt');
 const { transactionInstance } = require('../../dataBase_SQL').getInstance();
 const {
-    email_events: { NEW_USER },
+    email_events: { ACCOUNT_VERIFICATION },
     http_status_codes: { CREATED, OK, NO_CONTENT },
-    constants: { HOST, PATH_NAME_FOR_VERIFICATION_EMAIL, VERIFY_EMAIL_TOKEN_LIFE },
+    constants: { HOST, PATH_NAME_FOR_VERIFICATION_EMAIL, VERIFY_EMAIL_TOKEN_LIFE, VERIFY_YOUR_ACCOUNT_TEXT },
     config: { VERIFY_EMAIL_TOKEN_WORD }
 } = require('../../configs');
 const {
     email_sender_services: { email_sender },
     user_services: { create_user_service, update_user_service, update_user_avatar_service, delete_user_service,
-        update_verify_token_service, }
+        update_verify_token_service, update_token_for_password_reset_service }
 } = require('../../services');
 
 module.exports = {
@@ -59,13 +59,17 @@ module.exports = {
             delete new_user.dataValues.password;
 
             const id = { id: user_id };
-            const token_for_verification = jwt.sign({ id }, VERIFY_EMAIL_TOKEN_WORD, { expiresIn: VERIFY_EMAIL_TOKEN_LIFE });
+            const token_for_verification = jwt.sign(
+                { id }, VERIFY_EMAIL_TOKEN_WORD,
+                { expiresIn: VERIFY_EMAIL_TOKEN_LIFE }
+            );
 
             await update_verify_token_service(token_for_verification, user_id, transaction);
 
             const custom_url = `http://${HOST}/${PATH_NAME_FOR_VERIFICATION_EMAIL}?email=${req.body.email}&id=${token_for_verification}`;
-
-            await email_sender(req.body.email, NEW_USER, { user_name: req.body.name, custom_url });
+            await email_sender(req.body.email,
+                { type_of_action: ACCOUNT_VERIFICATION, text: VERIFY_YOUR_ACCOUNT_TEXT },
+                { user_name: req.body.name, custom_url });
             await transaction.commit();
 
             res.status(CREATED).json(new_user);
@@ -78,7 +82,7 @@ module.exports = {
     update_user_controller: async (req, res, next) => {
         const transaction = await transactionInstance();
         try {
-            const { user_id } = req.params;
+            const { user_id } = req.user;
             const { password, ...user } = req.body;
             const { avatar } = req;
 
@@ -106,6 +110,7 @@ module.exports = {
             const new_password = await password_hasher(password);
 
             await update_user_service(user, user_id, new_password, transaction);
+            await update_token_for_password_reset_service(null, user_id, transaction);
             await transaction.commit();
 
             res.sendStatus(OK);
