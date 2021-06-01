@@ -28,5 +28,8 @@ app.use('*', (err, req, res, next) => {
 });
 
 app.listen(5000, async () => {
+    // eslint-disable-next-line no-console
+    console.log('The server is running');
+
     await delete_tokens_after_one_week();
 });
